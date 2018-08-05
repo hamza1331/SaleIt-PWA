@@ -73,6 +73,7 @@ class LoginModal extends React.Component {
                         <form className="form-signin">
                             <h2 className="form-signin-heading">Please login</h2>
                             <input value={this.state.email} onChange={e => this.handleChange(e)} type="email" autoComplete='off' className="form-control inp" name="email" placeholder="Email Address" required={true} autoFocus={true} />
+                            <input type="text" />
                             <input value={this.state.pw} onChange={e => this.handleChange(e)} type="password" className="form-control inp" name="pw" placeholder="Password" required={true} />
                             <br/>
                             <button onClick={e => this.handleLogin(e)} className="btn btn-lg btn-primary btn-block" type="submit">Login</button><br/>

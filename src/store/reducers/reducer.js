@@ -7,7 +7,7 @@ import {
     closePostModal
 } from "../actions/actionNames";
 const initialState = {
-    isLoggedIn:false,
+    isLoggedIn:true,
     openLogin:false,
     openPost:false
 }
