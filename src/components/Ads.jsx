@@ -1,34 +1,63 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
+import './Ads.css'
+import { showAdModalAction,putAdAction } from "../store/actions/actions";
+import Loading from './load.gif'
 class Ads extends Component {
+    constructor(props){
+        super(props)
+        this.showAd = this.showAd.bind(this)
+    }
+    showAd(e){
+        this.props.putAd(e.target.id)
+        this.props.showAdModal()
+    }
     render() {
-        return (
-            <div className='container' style={{height:800,overflowY:'auto',overflowX:'hidden'}}>
-                <div className="card container">
-                    <div className="card-body row">
-                        <img src={require('./1.jpg')} alt="Image not found" height="250px" className="col-md-3" />
-                        <div className="col-md-7">
-                            <h4>Samsung Galaxy S9</h4>
-                            <p>4GB RAM - 64GB ROM - Fingerprint Sensor - Midnight Black</p>
-                            <h6>Key Features</h6>
-                            <ul>
-                                <li>Front 8 MP & Back 12 MP Camera</li>
-                                <li>4GB RAM - 64GB ROM</li>
-                                <li>Octa-core (4x2.7 GHz Mongoose M3 & 4x1.8 GHz Cortex-A55)</li>
-                                <li>Octa-core (4x2.7 GHz Mongoose M3 & 4x1.8 GHz Cortex-A55)</li>
-                            </ul>
-                            <button className="btn btn-info">Click Me</button>
-                        </div>
-
+        if(!this.props.loadingAds){
+            return(
+                <div className='container' style={{height:800,overflowY:'auto',overflowX:'hidden'}}>
+                {this.props.ads.map((ad,index)=>{
+                    return <div key={index}>
+                        <div className="card container">
+                                  <div className="card-body row">
+                                  <br/>
+                                      <img src={ad.downlaodUrls[0]} alt="not found" height="200px" className="col-md-3" />
+                                      <div className="col-md-7">
+                                          <h2>{ad.adTitle}</h2>
+                                          <h3>Category: {ad.adCategory}</h3>
+                                          <b><p>Location: {ad.location}</p></b>
+                                          <b><p>Posted on {Date.now()}</p></b>
+                                          <h3 style={{textAlign:'right',fontWeight:'bolder'}}>Price : Rs. {ad.price}</h3>
+                                          <button id={index} className="btn btn-info btn-lg pull-right" onClick={this.showAd}>Show Ad</button>
+                                      </div>
+                                  </div>
+                              </div>
+                              <hr className='line'/>
                     </div>
-                </div>
-                
+                })}
             </div>
+            )
+        }
+        return (
+            <div><center><img src={Loading} alt="NOt found"/></center></div>
+            
         )
     }
 }
+
+/*
+Main Card content
+1. adTitle
+2. Category
+3. Location
+4. Time
+5. Price
+*/
+
 function mapStateToProps(state){
     return({
+        ads:state.rootReducer.ads,
+        loadingAds:state.rootReducer.loadingAds
     })
   }
   
@@ -37,6 +66,12 @@ function mapStateToProps(state){
         // updateTime:(time)=>{
         //     dispatch(updateTime(time))
         // }
+        showAdModal:()=>{
+            dispatch(showAdModalAction())
+        },
+        putAd:(index)=>{
+            dispatch(putAdAction(index))
+        }
     })
   }
   export default connect(mapStateToProps,mapActionsToProps)(Ads)

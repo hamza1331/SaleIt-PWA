@@ -4,8 +4,53 @@ import {
     closeUserLogin,
     openUserLogin,
     openPostModal,
-    closePostModal
+    closePostModal,
+    addPost,
+    doneLoadingAds,
+    showAdModal,
+    hideAdModal,
+    putAd
 } from "./actionNames";
+
+export function addPostAction(ad){
+    return dispatch=>{
+        dispatch({
+            type:addPost,
+            payload:ad
+        })
+    }
+}
+
+export function putAdAction(index){
+    return dispatch=>{
+        dispatch({
+            type:putAd,
+            payload:index
+        })
+    }
+}
+
+export function showAdModalAction(){
+    return dispatch=>{
+        dispatch({
+            type:showAdModal
+        })
+    }
+}
+export function hideAdModalAction(){
+    return dispatch=>{
+        dispatch({
+            type:hideAdModal
+        })
+    }
+}
+export function doneLoadingAdsAction(){
+    return dispatch=>{
+        dispatch({
+            type:doneLoadingAds
+        })
+    }
+}
 
 export function openPostModalAction(){
     return dispatch=>{

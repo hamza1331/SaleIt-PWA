@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import Search from './Search'
 import Ads from './Ads'
+import AdModal from './AdModal'
 import './App.css'
 import firebase from 'firebase'
 import { 
   openUserLoginAction,
   LogoutAction,
-  openPostModalAction
+  openPostModalAction,
+  addPostAction,
+  doneLoadingAdsAction
  } from "../store/actions/actions";
 import PostModal from './PostModal'
 import LoginModal from './LoginModal'
@@ -15,6 +18,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.handleSignout = this.handleSignout.bind(this)
+    this.grabAdsFromFirebase = this.grabAdsFromFirebase.bind(this)
   }
   componentWillMount(){
     if(!firebase.apps.length){
@@ -28,6 +32,17 @@ class App extends Component {
       };
       firebase.initializeApp(config);
     }
+    this.grabAdsFromFirebase()
+  }
+  grabAdsFromFirebase(){
+    let firebaseRef = firebase.database().ref('saleitAds')
+    firebaseRef.once('value',snap=>{
+      snap.forEach((Key)=>{
+        let dataRef = firebaseRef.child(Key.ref.key).key
+        let ad = snap.child(dataRef).val()
+        this.props.addPost(ad)
+      })
+    }).then(()=>this.props.doneLoadingAds())
   }
   handleSignout(){
     firebase.auth().signOut().then(()=>this.props.logout()).catch(err=>alert(err.message))
@@ -35,7 +50,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        {!(this.props.openLogin ||this.props.openPost) && 
+        {!(this.props.openLogin ||this.props.openPost || this.props.showAd) && 
         <nav className="navbar navbar-inverse navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
@@ -62,7 +77,7 @@ class App extends Component {
           <Ads/>
           <LoginModal/>
           <PostModal/>
-          
+          <AdModal/>
       </div>
     );
   }
@@ -71,7 +86,8 @@ function mapStateToProps(state){
   return({
     isLoggedIn:state.rootReducer.isLoggedIn,
     openLogin:state.rootReducer.openLogin,
-    openPost:state.rootReducer.openPost
+    openPost:state.rootReducer.openPost,
+    showAd:state.rootReducer.showAd
   })
 }
 
@@ -85,6 +101,12 @@ function mapActionsToProps(dispatch){
       },
       openPostModal:()=>{
         dispatch(openPostModalAction())
+      },
+      addPost:(ad)=>{
+        dispatch(addPostAction(ad))
+      },
+      doneLoadingAds:()=>{
+        dispatch(doneLoadingAdsAction())
       }
   })
 }
