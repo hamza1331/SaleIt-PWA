@@ -16,7 +16,7 @@ class Ads extends Component {
         if(!this.props.loadingAds){
             return(
                 <div className='container' style={{height:800,overflowY:'auto',overflowX:'hidden'}}>
-                {this.props.ads.map((ad,index)=>{
+                {this.props.ads.length>0 && this.props.ads.map((ad,index)=>{
                     return <div key={index}>
                         <div className="card container">
                                   <div className="card-body row">
@@ -35,8 +35,11 @@ class Ads extends Component {
                               <hr className='line'/>
                     </div>
                 })}
+                {this.props.ads.length===0 && <h2 style={{textAlign:'center',fontWeight:'bolder'}}>No ads to show...</h2>}
             </div>
             )
+
+            
         }
         return (
             <div><center><img src={Loading} alt="NOt found"/></center></div>

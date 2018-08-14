@@ -15,8 +15,7 @@ ul.breadcrumb li+li:before {
     content: "/\00a0";
 }
 ul.breadcrumb li a  {
-  
     text-decoration: none;
-    
-    
 }
+
+  

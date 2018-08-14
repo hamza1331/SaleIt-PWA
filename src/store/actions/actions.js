@@ -9,8 +9,27 @@ import {
     doneLoadingAds,
     showAdModal,
     hideAdModal,
-    putAd
+    putAd,
+    search,
+    resetSearch
 } from "./actionNames";
+
+export function searchAction(text){
+    return dispatch=>{
+        dispatch({
+            type:search,
+            payload:text
+        })
+    }
+}
+
+export function resetSearchAction(){
+    return dispatch=>{
+        dispatch({
+            type:resetSearch
+        })
+    }
+}
 
 export function addPostAction(ad){
     return dispatch=>{

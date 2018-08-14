@@ -9,17 +9,20 @@ import {
     doneLoadingAds,
     showAdModal,
     hideAdModal,
-    putAd
+    putAd,
+    search,
+    resetSearch
 } from "../actions/actionNames";
-import { bindActionCreators } from "C:/Users/Waqas/AppData/Local/Microsoft/TypeScript/2.9/node_modules/redux";
 const initialState = {
-    isLoggedIn:true,
+    isLoggedIn:false,
     openLogin:false,
     openPost:false,
     ads:[],
     loadingAds:true,
     showAd:false,
-    renderAd:{}
+    renderAd:{},
+    oldAds:[],
+    searched:false
 }
 
 export default (state = initialState,action)=>{
@@ -30,6 +33,14 @@ export default (state = initialState,action)=>{
         return {...state,
             ads:[...state.ads,action.payload]
         }
+        case search:
+        let olds = state.ads
+        let updatedAds = state.ads.filter(ad=>{
+            return ad.adTitle.toLowerCase().indexOf(action.payload.toLowerCase())>=0
+        })
+        return{...state,oldAds:olds,ads:updatedAds,searched:true}
+        case resetSearch:
+        return{...state,ads:state.oldAds,searched:false}
         case putAd:
         return {...state,renderAd:state.ads[action.payload]}
         case doneLoadingAds:

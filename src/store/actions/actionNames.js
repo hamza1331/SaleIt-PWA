@@ -9,6 +9,8 @@ const doneLoadingAds = 'DONE_LOADING_ADS'
 const showAdModal = 'SHOW_AD_MODAL'
 const hideAdModal = 'HIDE_AD_MODAL'
 const putAd = "PUT_AD"
+const search = 'SEARCH'
+const resetSearch = 'RESET_SEARCH'
 export{
     login,
     logout,
@@ -20,5 +22,7 @@ export{
     openPostModal,
     closePostModal,
     doneLoadingAds,
-    putAd
+    putAd,
+    search,
+    resetSearch
 }
