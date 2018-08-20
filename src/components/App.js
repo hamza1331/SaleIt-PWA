@@ -21,28 +21,61 @@ class App extends Component {
     this.grabAdsFromFirebase = this.grabAdsFromFirebase.bind(this)
   }
   componentWillMount(){
-    if(!firebase.apps.length){
-      var config = {
-        apiKey: "AIzaSyDevJziMzAlMpErfarI9Q1DcBGU6JF-EF8",
-        authDomain: "explorefirebase-80b58.firebaseapp.com",
-        databaseURL: "https://explorefirebase-80b58.firebaseio.com",
-        projectId: "explorefirebase-80b58",
-        storageBucket: "explorefirebase-80b58.appspot.com",
-        messagingSenderId: "994024778201"
-      };
-      firebase.initializeApp(config);
+      if(!firebase.apps.length){
+        var config = {
+          apiKey: "AIzaSyDevJziMzAlMpErfarI9Q1DcBGU6JF-EF8",
+          authDomain: "explorefirebase-80b58.firebaseapp.com",
+          databaseURL: "https://explorefirebase-80b58.firebaseio.com",
+          projectId: "explorefirebase-80b58",
+          storageBucket: "explorefirebase-80b58.appspot.com",
+          messagingSenderId: "994024778201"
+        };
+        firebase.initializeApp(config);
+      }
+      const messaging = firebase.messaging()
+messaging.requestPermission().then(function(){
+    console.log('permission granted...')
+    return messaging.getToken()
+})
+.then(function(token){
+  let same = false
+  let firebaseNotificationsKeys = firebase.database().ref('saleitNotification')
+  firebaseNotificationsKeys.once('value',snap=>{
+  snap.forEach(Key=>{
+    let dataRef = firebaseNotificationsKeys.child(Key.ref.key).key
+    let data = snap.child(dataRef).val()
+    if(data===token){
+      same = true
     }
-    this.grabAdsFromFirebase()
+  })
+
+  }).then(()=>{
+    if(same===false)
+    firebaseNotificationsKeys.push(token) 
+  })
+  console.log(token)
+})
+.catch(function(err){
+    console.log(err)
+})
+
+messaging.onMessage(function(payload){
+    console.log(payload)
+})
+      this.grabAdsFromFirebase()
+    
   }
   grabAdsFromFirebase(){
-    let firebaseRef = firebase.database().ref('saleitAds')
-    firebaseRef.once('value',snap=>{
+      let firebaseRef = firebase.database().ref('saleitAds')
+      firebaseRef.once('value',snap=>{
       snap.forEach((Key)=>{
         let dataRef = firebaseRef.child(Key.ref.key).key
         let ad = snap.child(dataRef).val()
         this.props.addPost(ad)
       })
-    }).then(()=>this.props.doneLoadingAds())
+    }).then(()=>{
+      this.props.doneLoadingAds()
+    })
   }
   handleSignout(){
     firebase.auth().signOut().then(()=>this.props.logout()).catch(err=>alert(err.message))

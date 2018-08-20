@@ -14,7 +14,7 @@ import {
     resetSearch
 } from "../actions/actionNames";
 const initialState = {
-    isLoggedIn:false,
+    isLoggedIn:true,
     openLogin:false,
     openPost:false,
     ads:[],

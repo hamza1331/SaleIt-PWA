@@ -59,7 +59,7 @@ class LoginModal extends React.Component {
                 email: '',
                 pw: ''
             })
-            this.onCloseModalWithLogin()
+            console.log('in this moment I really want ')
         }).catch(function (error) {
             alert(error.message)
 
