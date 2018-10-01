@@ -12,7 +12,6 @@ class AdModal extends Component {
         this.props.hideAdModal()
     }
   render() {
-      console.log(this.props.renderAd)
     return (
         <Modal open={this.props.showAd} onClose={this.onCloseModal} little><br /><br />
         <div className='log' style={{height:400,overflowY:'auto',overflowX:'auto'}}>
